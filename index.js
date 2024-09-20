@@ -2,6 +2,8 @@ import express from "express";
 import { MongoClient } from "mongodb";
 import "dotenv/config";
 import { ObjectId } from "mongodb";
+import cors from 'cors';
+
 
 const app = express();
 
@@ -10,6 +12,7 @@ const app = express();
 
 // Middleware for parsing JSON request bodies
 app.use(express.json());
+app.use(cors())
 
 const PORT = process.env.PORT || 3000;
 
@@ -57,6 +60,7 @@ app.post("/todo", async (req, res) => {
 
 app.get("/todos", async (req, res) => {
   try {
+    console.log("todos fetching started")
     const findResult = await collection.find({}).toArray();
     res.status(200).send(findResult);
   } catch (error) {
