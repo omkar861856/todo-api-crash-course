@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 import "dotenv/config";
 import { ObjectId } from "mongodb";
 import cors from 'cors';
+import bodyParser from "body-parser";
 
 
 const app = express();
@@ -13,6 +14,7 @@ const app = express();
 // Middleware for parsing JSON request bodies
 app.use(express.json());
 app.use(cors())
+app.use(bodyParser.json())
 
 const PORT = process.env.PORT || 3000;
 
@@ -48,7 +50,7 @@ app.get("/", function (req, res) {
 
 app.post("/todo", async (req, res) => {
   const { title } = req.body;
-
+  console.log(req.body)
   try {
     const insertResult = await collection.insertOne({ title, completed:false });
     res.status(201).send(insertResult);
@@ -60,7 +62,6 @@ app.post("/todo", async (req, res) => {
 
 app.get("/todos", async (req, res) => {
   try {
-    console.log("todos fetching started")
     const findResult = await collection.find({}).toArray();
     res.status(200).send(findResult);
   } catch (error) {
