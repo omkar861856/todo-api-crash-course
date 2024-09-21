@@ -14,7 +14,6 @@ const app = express();
 // Middleware for parsing JSON request bodies
 app.use(express.json());
 app.use(cors())
-app.use(bodyParser.json())
 
 const PORT = process.env.PORT || 3000;
 
@@ -50,7 +49,6 @@ app.get("/", function (req, res) {
 
 app.post("/todo", async (req, res) => {
   const { title } = req.body;
-  console.log(req.body)
   try {
     const insertResult = await collection.insertOne({ title, completed:false });
     res.status(201).send(insertResult);
@@ -89,12 +87,15 @@ app.get('/todo/:id', async (req,res)=>{
 
 })
 
+// use the same endpoint - if() statements. and use or too.
+// make two different endpoints.
+
+
 app.put("/todo/:id", async (req,res) => {
     try {
         const id = req.params;
-        const {title, completed} = req.body;
-
-        const updateResult = await collection.updateOne({ _id: new ObjectId(id) }, { $set: {title, completed} });
+        const { completed } = req.body;
+        const updateResult = await collection.updateOne({ _id: new ObjectId(id) }, { $set: {completed} });
         res.status(200).send(updateResult)
 
         
